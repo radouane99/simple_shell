@@ -27,13 +27,13 @@ int is_delimm(char c, char *delimm)
 
 /**
  *_isalphas - checks for alphabetic character
- *@c: The character to input
+ *@d: The character to input
  *Return: 1 if c is alphabetic, 0 otherwise
  */
 
-int _isalphas(int cc)
+int _isalphas(int d)
 {
-	if ((cc >= 'a' && cc <= 'z') || (cc >= 'A' && cc <= 'Z'))
+	if ((d  >= 'a' && d <= 'z') || (d >= 'A' && d <= 'Z'))
 		return (1);
 	else
 		return (0);

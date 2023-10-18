@@ -129,11 +129,11 @@ char *convert_numbers(long int numm, int base, int flags)
  */
 void remove_comment(char *buff)
 {
-	int i;
-	for (i = 0; buff[i] != '\0'; i++)
-		if (buff[i] == '#' && (!i || buff[i - 1] == ' '))
-		{
-			buff[i] = '\0';
-			break;
-		}
+int i;
+for (i = 0; buff[i] != '\0'; i++)
+if (buff[i] == '#' && (!i || buff[i - 1] == ' '))
+{
+buff[i] = '\0';
+break;
+}
 }

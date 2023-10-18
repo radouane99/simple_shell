@@ -64,11 +64,11 @@ char *starts_withs(const char *haystacks, const char *needle)
  */
 char *_strcatt(char *destt, char *src)
 {
-	char *ret = destt;
-	while (*destt)
-		destt++;
-	while (*src)
-		*destt++ = *src++;
-	*destt = *src;
-	return (ret);
+char *ret = destt;
+while (*destt)
+destt++;
+while (*src)
+*destt++ = *src++;
+*destt = *src;
+return (ret);
 }

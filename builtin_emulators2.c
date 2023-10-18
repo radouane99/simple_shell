@@ -1,49 +1,48 @@
 #include "shell.h"
 
 /**
- * _myhistory - displays the history list, one command by line, preceded
- *              with line numbers, starting at 0.
- * @info: Structure containing potential arguments. Used to maintain
+ * _myhistore - displays the history list, one command by line, preceded
+ * @info1: Structure containing potential arguments. Used to maintain
  *        constant function prototype.
  *  Return: Always 0
  */
-int _myhistory(info_t *info)
+int _myhistore(info_t *info1)
 {
-	print_list(info->history);
+	print_list(info1->history);
 	return (0);
 }
 
 /**
- * unset_alias - sets alias to string
- * @info: parameter struct
+ * un_set_alias - sets alias to string
+ * @info1: parameter struct
  * @str: the string alias
  *
  * Return: Always 0 on success, 1 on error
  */
-int unset_alias(info_t *info, char *str)
+int un_set_alias(info_t *info1, char *str)
 {
 	char *p, c;
-	int ret;
+	int rett;
 
 	p = _strchr(str, '=');
 	if (!p)
 		return (1);
 	c = *p;
 	*p = 0;
-	ret = delete_node_at_index(&(info->alias),
-		get_node_index(info->alias, node_starts_with(info->alias, str, -1)));
+	rett = delete_node_at_index(&(info1->alias),
+		get_node_index(info1->alias, nodes_starts_with(info1->alias, str, -1)));
 	*p = c;
-	return (ret);
+	return (rett);
 }
 
 /**
  * set_alias - sets alias to string
- * @info: parameter struct
+ * @info1: parameter struct
  * @str: the string alias
  *
  * Return: Always 0 on success, 1 on error
  */
-int set_alias(info_t *info, char *str)
+int set_alias(info_t *info1, char *str)
 {
 	char *p;
 
@@ -51,10 +50,10 @@ int set_alias(info_t *info, char *str)
 	if (!p)
 		return (1);
 	if (!*++p)
-		return (unset_alias(info, str));
+		return (un_set_alias(info1, str));
 
-	unset_alias(info, str);
-	return (add_node_end(&(info->alias), str, 0) == NULL);
+	un_set_alias(info1, str);
+	return (add_node_end(&(info1->alias), str, 0) == NULL);
 }
 
 /**
@@ -81,20 +80,19 @@ int print_alias(list_t *node)
 }
 
 /**
- * _myalias - mimics the alias builtin (man alias)
- * @info: Structure containing potential arguments. Used to maintain
- *          constant function prototype.
+ * _my_alias - mimics the alias builtin (man alias)
+ * @info1: Structure containing potential arguments.
  *  Return: Always 0
  */
-int _myalias(info_t *info)
+int _my_alias(info_t *info1)
 {
 	int i = 0;
 	char *p = NULL;
 	list_t *node = NULL;
 
-	if (info->argc == 1)
+	if (info1->argc == 1)
 	{
-		node = info->alias;
+		node = info1->alias;
 		while (node)
 		{
 			print_alias(node);
@@ -102,13 +100,13 @@ int _myalias(info_t *info)
 		}
 		return (0);
 	}
-	for (i = 1; info->argv[i]; i++)
+	for (i = 1; info1->argv[i]; i++)
 	{
-		p = _strchr(info->argv[i], '=');
+		p = _strchr(info1->argv[i], '=');
 		if (p)
-			set_alias(info, info->argv[i]);
+			set_alias(info1, info1->argv[i]);
 		else
-			print_alias(node_starts_with(info->alias, info->argv[i], '='));
+			print_alias(nodes_starts_with(info1->alias, info1->argv[i], '='));
 	}
 
 	return (0);
