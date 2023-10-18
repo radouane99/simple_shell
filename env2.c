@@ -1,91 +1,93 @@
 #include "shell.h"
 
 /**
- * get_environnn - returns the string array copy of our environ
- * @infos: Structure containing potential arguments. 
+ * get_environ - returns the string array copy of our environ
+ * @info: Structure containing potential arguments. Used to maintain
+ *          constant function prototype.
  * Return: Always 0
  */
-char **get_environn(info_t *infos)
+char **get_environ(info_t *info)
 {
-	if (!infos->environ || infos->env_changed)
+	if (!info->environ || info->env_changed)
 	{
-		infos->environ = list_to_strings(infos->env);
-		infos->env_changed = 0;
+		info->environ = list_to_strings(info->env);
+		info->env_changed = 0;
 	}
 
-	return (infos->environ);
+	return (info->environ);
 }
 
 /**
  * _unsetenv - Remove an environment variable
- * @infos: Structure containing potential arguments. Used to maintain
+ * @info: Structure containing potential arguments. Used to maintain
  *        constant function prototype.
  *  Return: 1 on delete, 0 otherwise
  * @var: the string env var property
  */
-int _unsetenv(info_t *infos, char *var)
+int _unsetenv(info_t *info, char *var)
 {
-	list_t *nodes = infos->env;
+	list_t *node = info->env;
 	size_t i = 0;
 	char *p;
 
-	if (!nodes || !var)
+	if (!node || !var)
 		return (0);
 
-	while (nodes)
+	while (node)
 	{
-		p = starts_with(nodes->str, var);
+		p = starts_with(node->str, var);
 		if (p && *p == '=')
 		{
-			infos->env_changed = delete_nodes_at_index(&(infos->env), i);
+			info->env_changed = delete_node_at_index(&(info->env), i);
 			i = 0;
-			nodes = infos->env;
+			node = info->env;
 			continue;
 		}
-		nodes = nodes->next;
+		node = node->next;
 		i++;
 	}
-	return (infos->env_changed);
+	return (info->env_changed);
 }
 
 /**
  * _setenv - Initialize a new environment variable,
  *             or modify an existing one
- * @infos: Structure containing potential arguments.
+ * @info: Structure containing potential arguments. Used to maintain
+ *        constant function prototype.
  * @var: the string env var property
- * @values: the string env var values
+ * @value: the string env var value
  *  Return: Always 0
  */
-int _setenv(info_t *infos, char *var, char *values)
+int _setenv(info_t *info, char *var, char *value)
 {
 	char *buf = NULL;
-	list_t *nodes;
+	list_t *node;
 	char *p;
 
-	if (!var || !values)
+	if (!var || !value)
 		return (0);
 
-	buf = malloc(_strlen(var) + _strlen(values) + 2);
+	buf = malloc(_strlen(var) + _strlen(value) + 2);
 	if (!buf)
 		return (1);
 	_strcpy(buf, var);
 	_strcat(buf, "=");
-	_strcat(buf, values);
-	nodes = infos->env;
-	while (nodes)
+	_strcat(buf, value);
+	node = info->env;
+	while (node)
 	{
-		p = starts_with(nodes->str, var);
+		p = starts_with(node->str, var);
 		if (p && *p == '=')
 		{
-			free(nodes->str);
-			nodes->str = buf;
-			infos->env_changed = 1;
+			free(node->str);
+			node->str = buf;
+			info->env_changed = 1;
 			return (0);
 		}
-		nodes = nodes->next;
+		node = node->next;
 	}
-	add_nodes_end(&(infos->env), buf, 0);
+	add_node_end(&(info->env), buf, 0);
 	free(buf);
-	infos->env_changed = 1;
+	info->env_changed = 1;
 	return (0);
 }
